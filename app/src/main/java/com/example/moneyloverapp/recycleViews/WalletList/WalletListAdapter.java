@@ -34,7 +34,7 @@ public class WalletListAdapter extends RecyclerView.Adapter<WalletListViewHolder
     public void onBindViewHolder(@NonNull WalletListViewHolder holder, int position) {
         holder.walletName.setText(walletList.get(position).getName());
         holder.walletBalance.setText(NumberUltilities.FormatBalance(walletList.get(position).getBalance()));
-        holder.imageView.setImageResource(walletList.get(position).getImage());
+        holder.imageView.setImageResource(R.drawable.wallet_icon);
     }
 
     @Override
