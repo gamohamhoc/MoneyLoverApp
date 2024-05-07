@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingRight="12dp"
+    android:paddingLeft="8dp"
+    android:background="@drawable/round_shape"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="5dp">
+
+    <!--    image-->
+    <ImageView
+        android:id="@+id/habit_image"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp"
+        android:layout_marginRight="15dp"
+        android:layout_centerVertical="true"/>
+    <!--    transaction-->
+    <RelativeLayout
+        android:id="@+id/habit_info"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="48dp"
+        android:layout_toRightOf="@+id/habit_image">
+
+        <!--        category-->
+        <TextView
+            android:id="@+id/habit_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textStyle="bold"
+            android:text="Du lịch"
+            android:textSize="18sp"/>
+
+        <!--        date-->
+        <TextView
+            android:id="@+id/habit_status"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_below="@+id/habit_name"
+            android:textStyle="bold"
+            android:text="05/05/2024"
+            android:textSize="12sp"/>
+
+    </RelativeLayout>
+
+    <!--    total amount-->
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="48dp"
+        android:layout_toRightOf="@+id/habit_info"
+        android:text="1,000,000 VND"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_centerVertical="true"/>
+</LinearLayout>
