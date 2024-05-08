@@ -77,6 +77,87 @@
         app:layout_constraintTop_toBottomOf="@+id/wallet_list_header"/>
     <!--    bao cao chi tieu-->
 
+    <LinearLayout
+        android:id="@+id/expense_report_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/wallet_list">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:text="Báo cáo chi tiêu"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Xem báo cáo"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:gravity="end"
+            android:textColor="@color/text_link"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/expense_report_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:padding="12dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/expense_report_header">
+
+<!--        chon tgian tuan/thang-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black_frame"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Tuần"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Tháng"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+
+<!--        text view tong chi tuan/thang nay-->
+        
+<!--        text view phan tram so sanh tuan/thang nay voi tuan/thang truoc-->
+
+<!--        bieu do-->
+
+<!--        RV list 3 category dc chi tieu nhieu nhat-->
+
+    </RelativeLayout>
+
     <!--    giao dich gan day-->
     <LinearLayout
         android:id="@+id/recent_transaction_header"
@@ -86,7 +167,7 @@
         android:layout_marginTop="10dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/wallet_list">
+        app:layout_constraintTop_toBottomOf="@+id/expense_report_container">
 
         <TextView
             android:layout_width="0dp"
