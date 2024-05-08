@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
 import com.example.moneyloverapp.models.Transaction;
-import com.example.moneyloverapp.recycleViews.WalletList.WalletListViewHolder;
 import com.example.moneyloverapp.ultilities.DateTimeUltilities;
 import com.example.moneyloverapp.ultilities.NumberUltilities;
 

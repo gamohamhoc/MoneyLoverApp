@@ -6,8 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
+import com.example.moneyloverapp.models.Transaction;
+import com.example.moneyloverapp.recycleViews.RecentTransactions.RecentTransactionsAdapter;
+import com.example.moneyloverapp.recycleViews.UserOptions.UserOptionsAdapter;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +68,21 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_user, container, false);
+
+        //user options RV
+        RecyclerView userOptionsRV = view.findViewById(R.id.list_options);
+
+        List<String> options = new ArrayList<>();
+        options.add("Ví của tôi");
+        options.add("Khám phá Money Lover");
+        options.add("Hỗ trợ");
+        options.add("Cài đặt");
+        options.add("Giới thiệu");
+
+        userOptionsRV.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        userOptionsRV.setAdapter(new UserOptionsAdapter(view.getContext(), options));
+
+        return view;
     }
 }

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Số dư"
         android:textSize="12sp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:gravity="center"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:text="5,780,000.00 VND"
         android:textSize="15sp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/acc_balance_title"/>
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Tiền lương"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold" />
 
@@ -75,6 +75,7 @@
         android:layout_marginTop="5dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:background="@color/black_frame"
         app:layout_constraintTop_toBottomOf="@+id/choose_wallet_button"/>
 
 <!--    bao cao tong quan cho giai doan duoc chon-->
@@ -82,9 +83,9 @@
         android:id="@+id/current_phase_overview_report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_700"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:background="@color/black_frame"
         app:layout_constraintTop_toBottomOf="@+id/month_picker">
 
         <TextView
@@ -98,7 +99,7 @@
             android:paddingBottom="2dp"
             android:text="Số dư đầu"
             android:textSize="12sp"
-            android:textColor="@color/black_frame"/>
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/start_balance"
@@ -111,7 +112,7 @@
             android:paddingRight="15dp"
             android:text="7,880,000.00"
             android:textSize="16sp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textStyle="bold"/>
 
         <TextView
@@ -124,7 +125,7 @@
             app:layout_constraintTop_toBottomOf="@+id/start_balance_title"
             app:layout_constraintLeft_toLeftOf="parent"
             android:textSize="12sp"
-            android:textColor="@color/black_frame"/>
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/end_balance"
@@ -137,7 +138,7 @@
             android:paddingTop="2dp"
             android:text="5,780,000.00"
             android:textSize="16sp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textStyle="bold"/>
 
         <View
@@ -159,7 +160,7 @@
             android:paddingBottom="2dp"
             android:paddingRight="15dp"
             android:textSize="16sp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textStyle="bold"/>
 
         <TextView
@@ -169,10 +170,12 @@
             android:paddingLeft="8dp"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/result_balance"
             android:text="Xem báo cáo cho giai đoạn này"
+            android:background="@drawable/round_shape"
             android:textSize="16sp"
             android:textColor="@color/text_link"
             android:textStyle="bold"/>
