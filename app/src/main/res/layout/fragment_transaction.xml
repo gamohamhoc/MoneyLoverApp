@@ -1,15 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.TransactionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+<!--    text view so du-->
     <TextView
+        android:id="@+id/acc_balance_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="transactions" />
+        android:layout_height="wrap_content"
+        android:text="Số dư"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/acc_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="5,780,000.00 VND"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/acc_balance_title"/>
+
+<!--    button chon wallet-->
+    <LinearLayout
+        android:id="@+id/choose_wallet_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="3dp"
+        android:paddingTop="5dp"
+        android:paddingRight="3dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/acc_balance">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/wallet_icon"
+            android:contentDescription="@string/icon_content_description" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Tiền lương"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/icon_content_description"
+            android:src="@drawable/baseline_arrow_drop_down_24" />
+
+    </LinearLayout>
+
+<!--    RV chon thoi gian: 12 thang nguoc ve qkhu ke tu thang hien tai-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/month_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/choose_wallet_button"/>
+
+<!--    bao cao tong quan cho giai doan duoc chon-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/current_phase_overview_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_700"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/month_picker">
+
+        <TextView
+            android:id="@+id/start_balance_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingLeft="15dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="Số dư đầu"
+            android:textSize="12sp"
+            android:textColor="@color/black_frame"/>
+
+        <TextView
+            android:id="@+id/start_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingRight="15dp"
+            android:text="7,880,000.00"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số dư cuối"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingLeft="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/start_balance_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textSize="12sp"
+            android:textColor="@color/black_frame"/>
+
+        <TextView
+            android:id="@+id/end_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start_balance"
+            android:paddingRight="15dp"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:text="5,780,000.00"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="200dp"
+            android:layout_height="1dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/end_balance"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/result_balance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-2,100,000.00"
+            android:textAlignment="viewEnd"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/end_balance"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingRight="15dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/result_balance"
+            android:text="Xem báo cáo cho giai đoạn này"
+            android:textSize="16sp"
+            android:textColor="@color/text_link"
+            android:textStyle="bold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--    list transaction theo ngay trong giai doan(moi 1 ngay la 1 RV??)-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
