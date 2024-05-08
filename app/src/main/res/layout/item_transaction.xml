@@ -3,58 +3,57 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingRight="12dp"
+    android:paddingRight="8dp"
     android:paddingLeft="8dp"
-    android:background="@drawable/round_shape"
-    android:layout_marginTop="5dp"
-    android:layout_marginEnd="5dp">
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp">
 
     <!--    image-->
     <ImageView
-        android:id="@+id/habit_image"
+        android:id="@+id/transaction_img"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="40dp"
-        android:layout_marginRight="15dp"
-        android:layout_centerVertical="true"/>
+        android:layout_marginEnd="15dp" />
     <!--    transaction-->
     <RelativeLayout
-        android:id="@+id/habit_info"
+        android:id="@+id/transaction_info"
         android:layout_width="0dp"
-        android:layout_weight="3"
-        android:layout_height="48dp"
-        android:layout_toRightOf="@+id/habit_image">
+        android:layout_height="match_parent"
+        android:layout_weight="3">
 
         <!--        category-->
         <TextView
-            android:id="@+id/habit_name"
+            android:id="@+id/transaction_category"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:textStyle="bold"
+            android:layout_height="25dp"
             android:text="Du lịch"
-            android:textSize="18sp"/>
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
         <!--        date-->
         <TextView
-            android:id="@+id/habit_status"
+            android:id="@+id/transaction_date"
             android:layout_width="match_parent"
-            android:layout_height="18dp"
-            android:layout_below="@+id/habit_name"
-            android:textStyle="bold"
+            android:layout_height="15dp"
+            android:layout_below="@+id/transaction_category"
             android:text="05/05/2024"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
     <!--    total amount-->
     <TextView
+        android:id="@+id/transaction_amount"
         android:layout_width="0dp"
         android:layout_weight="2"
-        android:layout_height="48dp"
-        android:layout_toRightOf="@+id/habit_info"
+        android:layout_height="match_parent"
         android:text="1,000,000 VND"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_centerVertical="true"/>
+        android:textSize="12sp"
+        android:textAlignment="gravity"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 </LinearLayout>

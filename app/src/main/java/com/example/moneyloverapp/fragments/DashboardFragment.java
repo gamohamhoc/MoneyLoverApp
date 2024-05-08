@@ -10,10 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
+import com.example.moneyloverapp.models.Transaction;
 import com.example.moneyloverapp.models.Wallet;
+import com.example.moneyloverapp.recycleViews.RecentTransactions.RecentTransactionsAdapter;
 import com.example.moneyloverapp.recycleViews.WalletList.WalletListAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,6 +81,17 @@ public class DashboardFragment extends Fragment {
 
         walletListRV.setLayoutManager(new LinearLayoutManager(view.getContext()));
         walletListRV.setAdapter(new WalletListAdapter(view.getContext(), walletList));
+
+        //recent transaction recycler view
+        RecyclerView recentTransactionRV = view.findViewById(R.id.recent_transaction_list);
+
+        List<Transaction> recentTransactions = new ArrayList<>();
+        recentTransactions.add(new Transaction("Ăn trưa", "Ăn uống", 60000, 1, new Date(2024 - 1900, 4, 8)));
+        recentTransactions.add(new Transaction("Ăn sáng", "Ăn uống", 20000, 1, new Date(2024 - 1900, 4, 8)));
+        recentTransactions.add(new Transaction("Ăn sáng", "Ăn uống", 15000, 1, new Date(2024 - 1900, 4, 7)));
+
+        recentTransactionRV.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recentTransactionRV.setAdapter(new RecentTransactionsAdapter(view.getContext(), recentTransactions));
 
         // Inflate the layout for this fragment
         return view;
