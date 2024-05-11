@@ -36,7 +36,7 @@ public class UserOptionsAdapter extends RecyclerView.Adapter<UserOptionsViewHold
                 holder.Icon1.setImageResource(R.drawable.baseline_wallet_24);
                 break;
             case "Khám phá Money Lover":
-                holder.Icon1.setImageResource(R.drawable.wallet_icon);
+                holder.Icon1.setImageResource(R.drawable.explore_icon);
                 break;
             case "Hỗ trợ":
                 holder.Icon1.setImageResource(R.drawable.baseline_contact_support_24);
@@ -45,7 +45,7 @@ public class UserOptionsAdapter extends RecyclerView.Adapter<UserOptionsViewHold
                 holder.Icon1.setImageResource(R.drawable.baseline_settings_24);
                 break;
             case "Giới thiệu":
-                holder.Icon1.setImageResource(R.drawable.wallet_icon);
+                holder.Icon1.setImageResource(R.drawable.baseline_info_24);
                 break;
         }
 
