@@ -4,18 +4,23 @@ import java.util.Date;
 
 public class Transaction {
     int Id;
-    String Description;
+    int CategoryId;
     String Category;
-    float Amount;
     int WalletId;
-    Date CreatedDate;
+    float Amount;
+    Date Date;
+    String Description;
 
-    public Transaction(String description, String category, float amount, int walletId, Date createdDate) {
-        Description = description;
-        Category = category;
-        Amount = amount;
+    public Transaction() {
+    }
+
+    public Transaction(int id, int categoryId, int walletId, float amount, Date date, String description) {
+        Id = id;
+        CategoryId = categoryId;
         WalletId = walletId;
-        CreatedDate = createdDate;
+        Amount = amount;
+        Date = date;
+        Description = description;
     }
 
     public int getId() {
@@ -26,12 +31,12 @@ public class Transaction {
         Id = id;
     }
 
-    public String getDescription() {
-        return Description;
+    public int getCategoryId() {
+        return CategoryId;
     }
 
-    public void setDescription(String description) {
-        Description = description;
+    public void setCategoryId(int categoryId) {
+        CategoryId = categoryId;
     }
 
     public String getCategory() {
@@ -42,14 +47,6 @@ public class Transaction {
         Category = category;
     }
 
-    public float getAmount() {
-        return Amount;
-    }
-
-    public void setAmount(float amount) {
-        Amount = amount;
-    }
-
     public int getWalletId() {
         return WalletId;
     }
@@ -58,11 +55,27 @@ public class Transaction {
         WalletId = walletId;
     }
 
-    public Date getCreatedDate() {
-        return CreatedDate;
+    public float getAmount() {
+        return Amount;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        CreatedDate = createdDate;
+    public void setAmount(float amount) {
+        Amount = amount;
+    }
+
+    public java.util.Date getDate() {
+        return Date;
+    }
+
+    public void setDate(java.util.Date date) {
+        Date = date;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
     }
 }

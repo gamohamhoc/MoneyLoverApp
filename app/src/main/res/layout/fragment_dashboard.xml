@@ -80,7 +80,7 @@
     <LinearLayout
         android:id="@+id/expense_report_header"
         android:layout_width="match_parent"
-        android:layout_height="1000dp"
+        android:layout_height="300dp"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:paddingTop="5dp"
