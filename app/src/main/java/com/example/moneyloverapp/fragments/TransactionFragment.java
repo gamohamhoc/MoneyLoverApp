@@ -64,7 +64,12 @@ public class TransactionFragment extends Fragment {
     }
 
     void GetTransactionsByDateRV(){
-        TrnansactionsByDateRV.setLayoutManager(new LinearLayoutManager(getContext()));
+        TrnansactionsByDateRV.setLayoutManager(new LinearLayoutManager(getContext()){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
 
         List<Transaction> transactions = transactionDAO.GetAll();
         List<TransactionsByDate> transactionsByDates = new ArrayList<>();
