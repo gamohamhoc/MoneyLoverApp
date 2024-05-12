@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.moneyloverapp.database.DatabaseHandler;
 import com.example.moneyloverapp.models.Transaction;
-import com.example.moneyloverapp.models.Wallet;
 import com.example.moneyloverapp.ultilities.DateTimeUltilities;
 
 import java.util.ArrayList;
@@ -16,9 +15,11 @@ import java.util.List;
 
 public class TransactionDAO {
     private SQLiteDatabase db;
+    private CategoryDAO categoryDAO;
 
     public TransactionDAO (Context context) {
         DatabaseHandler dbHandler = new DatabaseHandler (context);
+        categoryDAO = new CategoryDAO(context);
         db = dbHandler.getWritableDatabase();
     }
 
@@ -35,6 +36,8 @@ public class TransactionDAO {
             transaction.setAmount(c.getFloat(c.getColumnIndex("Amount")));
             transaction.setDate(DateTimeUltilities.StringToDate("dd/MM/yyyy", c.getString(c.getColumnIndex("Date"))));
             transaction.setDescription(c.getString(c.getColumnIndex("Description")));
+
+            transaction.setCategory(categoryDAO.GetById(c.getInt(c.getColumnIndex("CategoryId"))).getName());
 
             list.add(transaction);
         }
@@ -79,6 +82,8 @@ public class TransactionDAO {
                 DateTimeUltilities.StringToDate("dd/MM/yyyy",c.getString(4)),
                 c.getString(5)
         );
+        transaction.setCategory(categoryDAO.GetById(c.getInt(0)).getName());
+
         return transaction;
     }
 

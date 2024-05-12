@@ -183,6 +183,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-<!--    list transaction theo ngay trong giai doan(moi 1 ngay la 1 RV??)-->
+<!--    list transaction theo ngay trong giai doan-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/transactions_by_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/current_phase_overview_report"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

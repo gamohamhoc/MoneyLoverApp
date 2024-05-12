@@ -6,8 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
+import com.example.moneyloverapp.database.DAO.TransactionDAO;
+import com.example.moneyloverapp.models.Transaction;
+import com.example.moneyloverapp.models.TransactionsByDate;
+import com.example.moneyloverapp.recycleViews.TransactionsByDate.TransactionsByDateAdapter;
+import com.example.moneyloverapp.recycleViews.WalletList.WalletListAdapter;
+import com.example.moneyloverapp.ultilities.DateTimeUltilities;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,33 +29,15 @@ import com.example.moneyloverapp.R;
  */
 public class TransactionFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    RecyclerView TrnansactionsByDateRV;
+    TransactionDAO transactionDAO;
     public TransactionFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TransactionFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TransactionFragment newInstance(String param1, String param2) {
+    public static TransactionFragment newInstance() {
         TransactionFragment fragment = new TransactionFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,16 +45,59 @@ public class TransactionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_transaction, container, false);
+
+        //
+        transactionDAO = new TransactionDAO(getContext());
+        //
+        TrnansactionsByDateRV = view.findViewById(R.id.transactions_by_date);
+        //
+        GetTransactionsByDateRV();
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_transaction, container, false);
+        return view;
+    }
+
+    void GetTransactionsByDateRV(){
+        TrnansactionsByDateRV.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<Transaction> transactions = transactionDAO.GetAll();
+        List<TransactionsByDate> transactionsByDates = new ArrayList<>();
+
+        HashMap<Date, List<Transaction>> resultMap = new HashMap<>();
+        for (Transaction transaction : transactions) {
+            Date dateKey = transaction.getDate();
+
+            if (!resultMap.containsKey(dateKey)) {
+                resultMap.put(dateKey, new ArrayList<Transaction>());
+            }
+
+            resultMap.get(dateKey).add(transaction);
+        }
+
+        float totalAmount;
+        for(Date dateKey : resultMap.keySet()){
+            totalAmount = 0;
+            TransactionsByDate transactionsByDate = new TransactionsByDate();
+            List<Transaction> transactionList = resultMap.get(dateKey);
+
+
+            transactionsByDate.setTransactions(transactionList);
+            transactionsByDate.setDate(dateKey);
+
+            for (Transaction transaction : transactionList) {
+                totalAmount += transaction.getAmount();
+            }
+            transactionsByDate.setTotalAmount(totalAmount);
+
+            transactionsByDates.add(transactionsByDate);
+        }
+
+        TrnansactionsByDateRV.setAdapter(new TransactionsByDateAdapter(transactionsByDates));
     }
 }

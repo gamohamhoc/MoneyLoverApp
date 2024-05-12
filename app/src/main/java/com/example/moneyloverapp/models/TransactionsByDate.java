@@ -1,22 +1,28 @@
 package com.example.moneyloverapp.models;
 
 import java.util.Date;
+import java.util.List;
 
 public class TransactionsByDate {
-    Transaction transaction;
+    List<Transaction> transactions;
     Date date;
+    float totalAmount;
 
-    public TransactionsByDate(Transaction transaction, Date date) {
-        this.transaction = transaction;
+    public TransactionsByDate() {
+    }
+
+    public TransactionsByDate(List<Transaction> transactions, Date date, float totalAmount) {
+        this.transactions = transactions;
         this.date = date;
+        this.totalAmount = totalAmount;
     }
 
-    public Transaction getTransaction() {
-        return transaction;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public void setTransactions(List<Transaction> transaction) {
+        this.transactions = transaction;
     }
 
     public Date getDate() {
@@ -25,5 +31,13 @@ public class TransactionsByDate {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public float getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(float totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }
