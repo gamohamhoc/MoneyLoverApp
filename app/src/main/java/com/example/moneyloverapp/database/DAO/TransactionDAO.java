@@ -91,4 +91,9 @@ public class TransactionDAO {
         String sql = "SELECT * FROM Transactions";
         return GetData(sql);
     }
+
+    public List<Transaction> GetTransactionsbyWalletId(int walletId){
+        String sql = "SELECT * FROM Transactions WHERE WalletId = ?";
+        return GetData(sql, new String[]{walletId+""});
+    }
 }

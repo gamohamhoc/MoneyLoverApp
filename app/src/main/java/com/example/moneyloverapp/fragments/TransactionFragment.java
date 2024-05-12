@@ -18,6 +18,8 @@ import com.example.moneyloverapp.recycleViews.WalletList.WalletListAdapter;
 import com.example.moneyloverapp.ultilities.DateTimeUltilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +73,7 @@ public class TransactionFragment extends Fragment {
             }
         });
 
-        List<Transaction> transactions = transactionDAO.GetAll();
+        List<Transaction> transactions = transactionDAO.GetTransactionsbyWalletId(2);
         List<TransactionsByDate> transactionsByDates = new ArrayList<>();
 
         HashMap<Date, List<Transaction>> resultMap = new HashMap<>();
@@ -102,6 +104,12 @@ public class TransactionFragment extends Fragment {
 
             transactionsByDates.add(transactionsByDate);
         }
+
+        Collections.sort(transactionsByDates, new Comparator<TransactionsByDate>() {
+            public int compare(TransactionsByDate o1, TransactionsByDate o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
 
         TrnansactionsByDateRV.setAdapter(new TransactionsByDateAdapter(transactionsByDates));
     }

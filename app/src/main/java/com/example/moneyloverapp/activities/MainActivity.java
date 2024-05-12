@@ -50,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Xử lý sự kiện khi FAB được bấm
-                Intent intent = new Intent(MainActivity.this, AddTransactionActivity.class);
+                Intent intent = new Intent(MainActivity.this, TransactionActivity.class);
+
+                String val = "Thêm giao dịch";
+                intent.putExtra("actionBarTitle", val);
+
                 startActivity(intent);
             }
         });

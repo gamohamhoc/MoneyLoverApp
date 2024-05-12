@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MoneyLoverApp"
         tools:targetApi="31">
         <activity
-            android:name=".activities.AddTransactionActivity"
+            android:name=".activities.TransactionActivity"
             android:exported="false" />
         <activity
             android:name=".activities.WalletsActitvity"

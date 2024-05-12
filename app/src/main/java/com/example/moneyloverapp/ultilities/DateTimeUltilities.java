@@ -20,7 +20,7 @@ public class DateTimeUltilities {
         try {
             date1 = sdf.parse(date);
         } catch (ParseException e) {
-            return new Date(2002 + 1900, 9, 21);
+            return new Date(2002 - 1900, 9, 21);
         }
         return date1;
     }
