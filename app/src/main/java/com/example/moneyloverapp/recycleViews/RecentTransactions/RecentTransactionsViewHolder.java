@@ -14,6 +14,7 @@ public class RecentTransactionsViewHolder extends RecyclerView.ViewHolder implem
     TextView category;
     TextView date;
     TextView amount;
+    TextView id;
 
 
     public RecentTransactionsViewHolder(@NonNull View itemView) {
@@ -21,6 +22,7 @@ public class RecentTransactionsViewHolder extends RecyclerView.ViewHolder implem
 
         itemView.setOnClickListener(this);
 
+        id = itemView.findViewById(R.id.id);
         imageView = itemView.findViewById(R.id.transaction_img);
         category = itemView.findViewById(R.id.transaction_category);
         date = itemView.findViewById(R.id.transaction_date);

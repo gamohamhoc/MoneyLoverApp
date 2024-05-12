@@ -64,4 +64,8 @@ public class WalletSpinnerAdapter extends ArrayAdapter<Wallet> {
         }
         return v;
     }
+
+    public List<Wallet> getWallets() {
+        return wallets;
+    }
 }

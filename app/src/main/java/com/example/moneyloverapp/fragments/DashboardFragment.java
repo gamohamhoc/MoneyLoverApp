@@ -110,7 +110,7 @@ public class DashboardFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), TransactionActivity.class);
 
                 String val = "Chi tiết giao dịch";
-                int transactionId = Integer.parseInt (((TextView)v.findViewById(R.id.transaction_category)).getText().toString());
+                int transactionId = Integer.parseInt (((TextView)v.findViewById(R.id.id)).getText().toString());
                 intent.putExtra("actionBarTitle", val);
                 intent.putExtra("transactionId", transactionId);
 

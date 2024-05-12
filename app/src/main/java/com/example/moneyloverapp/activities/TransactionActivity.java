@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import com.example.moneyloverapp.recycleViews.Spinner.WalletSpinnerAdapter;
 import com.example.moneyloverapp.ultilities.DateTimeUltilities;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class TransactionActivity extends AppCompatActivity {
@@ -33,8 +35,8 @@ public class TransactionActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Spinner categorySpinner;
     private Spinner walletSpinner;
-    TextView amountInput;
-    TextView descriptionInput;
+    EditText amountInput;
+    EditText descriptionInput;
     CategoryDAO categoryDAO;
     WalletDAO walletDAO;
     TransactionDAO transactionDAO;
@@ -61,6 +63,8 @@ public class TransactionActivity extends AppCompatActivity {
         dateButton = findViewById(R.id.datePickerButton);
         categorySpinner = findViewById(R.id.categorySpinner);
         walletSpinner = findViewById(R.id.walletSpinner);
+        amountInput = findViewById(R.id.amount_input);
+        descriptionInput = findViewById(R.id.description_input);
         //
         categoryDAO = new CategoryDAO(getApplicationContext());
         walletDAO = new WalletDAO(getApplicationContext());
@@ -83,16 +87,33 @@ public class TransactionActivity extends AppCompatActivity {
         if (intent != null) {
             actionBarTitle.setText(intent.getStringExtra("actionBarTitle"));
 
-            if(intent.getStringExtra("transactionId") != null){
-                int id = intent.getIntExtra("transactionId", 0);
+            int id = intent.getIntExtra("transactionId", 0);
 
-                transaction = transactionDAO.GetById(id);
-                if(transaction != null){
-                    category = categoryDAO.GetById(transaction.getCategoryId());
-                    wallet = walletDAO.GetById(transaction.getWalletId());
+            transaction = transactionDAO.GetById(id);
+            if(transaction != null){
+                category = categoryDAO.GetById(transaction.getCategoryId());
+                wallet = walletDAO.GetById(transaction.getWalletId());
 
-                     TextView amount = findViewById(R.id.tran)
+                List<Category> categories = categorySpinnerAdapter.getCategories();
+                for (Category c : categories) {
+                    if(c.getId() == category.getId()){
+                        categorySpinner.setSelection(categories.indexOf(c));
+                    }
                 }
+
+                List<Wallet> walletList = walletSpinnerAdapter.getWallets();
+                for (Wallet c : walletList) {
+                    if(c.getId() == wallet.getId()){
+                        categorySpinner.setSelection(walletList.indexOf(c));
+                    }
+                }
+
+                amountInput.setText(transaction.getAmount()+"", TextView.BufferType.EDITABLE);
+                descriptionInput.setText(transaction.getDescription(), TextView.BufferType.EDITABLE);
+
+                Date transactionDate = transaction.getDate();
+                dateButton.setText(DateTimeUltilities.FormatDate("MMM dd yyyy", transactionDate));
+                datePickerDialog.updateDate(transactionDate.getYear() + 1900, transactionDate.getMonth(), transactionDate.getDate());
             }
         }
 

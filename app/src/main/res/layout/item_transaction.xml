@@ -8,6 +8,11 @@
     android:layout_marginTop="12dp"
     android:layout_marginBottom="12dp">
 
+    <TextView
+        android:id="@+id/id"
+        android:layout_width="0dp"
+        android:text=""
+        android:layout_height="0dp"/>
     <!--    image-->
     <ImageView
         android:id="@+id/transaction_img"

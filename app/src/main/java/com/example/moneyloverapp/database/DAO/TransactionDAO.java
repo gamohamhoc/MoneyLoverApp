@@ -72,19 +72,22 @@ public class TransactionDAO {
 
     public Transaction GetById(int Id){
         Cursor c = db.query("Transactions", null,"Id = ?", new String[] { String.valueOf(Id) },null, null, null);
-        if(c != null)
+        if(c != null && c.getCount() > 0){
             c.moveToFirst();
-        Transaction transaction = new Transaction(
-                c.getInt(0),
-                c.getInt(1),
-                c.getInt(2),
-                c.getFloat(3),
-                DateTimeUltilities.StringToDate("dd/MM/yyyy",c.getString(4)),
-                c.getString(5)
-        );
-        transaction.setCategory(categoryDAO.GetById(c.getInt(0)).getName());
+            Transaction transaction = new Transaction(
+                    c.getInt(0),
+                    c.getInt(1),
+                    c.getInt(2),
+                    c.getFloat(3),
+                    DateTimeUltilities.StringToDate("dd/MM/yyyy",c.getString(4)),
+                    c.getString(5)
+            );
+            transaction.setCategory(categoryDAO.GetById(c.getInt(0)).getName());
 
-        return transaction;
+            return transaction;
+        }
+
+        return null;
     }
 
     public List<Transaction> GetAll(){

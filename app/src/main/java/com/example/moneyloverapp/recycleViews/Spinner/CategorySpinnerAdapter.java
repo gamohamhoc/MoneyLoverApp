@@ -64,4 +64,8 @@ public class CategorySpinnerAdapter extends ArrayAdapter<Category> {
         }
         return v;
     }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
 }

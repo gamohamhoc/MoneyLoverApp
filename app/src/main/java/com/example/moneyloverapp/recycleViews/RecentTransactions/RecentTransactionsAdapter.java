@@ -53,6 +53,7 @@ public class RecentTransactionsAdapter extends RecyclerView.Adapter<RecentTransa
 
     @Override
     public void onBindViewHolder(@NonNull RecentTransactionsViewHolder holder, int position) {
+        holder.id.setText(recentTransactions.get(position).getId()+"");
         holder.category.setText(recentTransactions.get(position).getCategory());
         holder.date.setText(DateTimeUltilities.FormatDate("dd/MM/yyyy" ,recentTransactions.get(position).getDate()));
         holder.amount.setText(NumberUltilities.FormatBalance(recentTransactions.get(position).getAmount()));
