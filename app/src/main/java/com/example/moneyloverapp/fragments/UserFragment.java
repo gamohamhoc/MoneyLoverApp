@@ -81,7 +81,7 @@ public class UserFragment extends Fragment {
         options.add("Giới thiệu");
 
         userOptionsRV.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        userOptionsRV.setAdapter(new UserOptionsAdapter(view.getContext(), options));
+        userOptionsRV.setAdapter(new UserOptionsAdapter(view.getContext(), options, getActivity()));
 
         return view;
     }

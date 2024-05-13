@@ -202,77 +202,85 @@ public class TransactionActivity extends AppCompatActivity {
                     //TH add transaction
                     if(transaction == null){
                         transaction = new Transaction();
+                        try{
+                            transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
+                            transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
+                            transaction.setDate(DateTimeUltilities.StringToDate("MMM dd yyyy", dateButton.getText().toString()));
+                            transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
+                            transaction.setDescription(descriptionTV.getText().toString());
 
-                        transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
-                        transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
-                        transaction.setDate(DateTimeUltilities.StringToDate("MMM dd yyyy", dateButton.getText().toString()));
-                        transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
-                        transaction.setDescription(descriptionTV.getText().toString());
+                            Wallet wallet1 = walletDAO.GetById(
+                                    Integer.parseInt(
+                                            ((TextView)findViewById(R.id.sp_wallet_id)).getText().toString()));
 
-                        Wallet wallet1 = walletDAO.GetById(
-                                Integer.parseInt(
-                                        ((TextView)findViewById(R.id.sp_wallet_id)).getText().toString()));
-
-                        if(transaction.getAmount() <= wallet1.getBalance() ||
-                                categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
-                            if(!transaction.getDate().after(new Date())){
-                                if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
-                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
-                                    globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
-                                }else{
-                                    wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
-                                    globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
+                            if(transaction.getAmount() <= wallet1.getBalance() ||
+                                    categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
+                                if(!transaction.getDate().after(new Date())){
+                                    if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
+                                        wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                        globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
+                                    }else{
+                                        wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
+                                        globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
+                                    }
+                                    transactionDAO.Add(transaction);
+                                    walletDAO.Update(wallet1);
+                                    walletDAO.Update(globalWallet);
+                                    Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }else {
+                                    Toast.makeText(getApplicationContext(), "Không được nhập ngày trong tương lai!", Toast.LENGTH_SHORT).show();
                                 }
-                                transactionDAO.Add(transaction);
-                                walletDAO.Update(wallet1);
-                                walletDAO.Update(globalWallet);
-                                Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                                startActivity(intent);
-                            }else {
-                                Toast.makeText(getApplicationContext(), "Không được nhập ngày trong tương lai!", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Số tiền vượt quá số dư ví!", Toast.LENGTH_SHORT).show();
                             }
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Số tiền vượt quá số dư ví!", Toast.LENGTH_SHORT).show();
+                        }catch (Exception e){
+                            Toast.makeText(getApplicationContext(), "Vui lòng nhập sồ tiền hợp lệ!", Toast.LENGTH_SHORT).show();
                         }
+
                         //TH edit transaction
                     }else{
-                        Wallet wallet1 = walletDAO.GetById(
-                                Integer.parseInt(
-                                        ((TextView)findViewById(R.id.sp_wallet_id)).getText().toString()));
-                        if(categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
-                            wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
-                            globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
-                        }else{
-                            wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
-                            globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
-                        }
-
-                        transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
-                        transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
-                        transaction.setDate(DateTimeUltilities.StringToDate("MMM dd yyyy", dateButton.getText().toString()));
-                        transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
-                        transaction.setDescription(descriptionTV.getText().toString());
-
-                        if(transaction.getAmount() <= wallet1.getBalance() ||
-                                categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
-                            if(!transaction.getDate().after(new Date())){
-                                if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
-                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
-                                    globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
-                                }else{
-                                    wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
-                                    globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
-                                }
-                                transactionDAO.Update(transaction);
-                                walletDAO.Update(wallet1);
-                                walletDAO.Update(globalWallet);
-                                Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                                startActivity(intent);
-                            }else {
-                                Toast.makeText(getApplicationContext(), "Không được nhập ngày trong tương lai!", Toast.LENGTH_SHORT).show();
+                        try {
+                            Wallet wallet1 = walletDAO.GetById(
+                                    Integer.parseInt(
+                                            ((TextView)findViewById(R.id.sp_wallet_id)).getText().toString()));
+                            if(categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
+                                wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
+                                globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
+                            }else{
+                                wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
                             }
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Số tiền vượt quá số dư ví!", Toast.LENGTH_SHORT).show();
+
+                            transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
+                            transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
+                            transaction.setDate(DateTimeUltilities.StringToDate("MMM dd yyyy", dateButton.getText().toString()));
+                            transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
+                            transaction.setDescription(descriptionTV.getText().toString());
+
+                            if(transaction.getAmount() <= wallet1.getBalance() ||
+                                    categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
+                                if(!transaction.getDate().after(new Date())){
+                                    if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
+                                        wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                        globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
+                                    }else{
+                                        wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
+                                        globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
+                                    }
+                                    transactionDAO.Update(transaction);
+                                    walletDAO.Update(wallet1);
+                                    walletDAO.Update(globalWallet);
+                                    Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }else {
+                                    Toast.makeText(getApplicationContext(), "Không được nhập ngày trong tương lai!", Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Số tiền vượt quá số dư ví!", Toast.LENGTH_SHORT).show();
+                            }
+                        }catch (Exception e){
+                            Toast.makeText(getApplicationContext(), "Vui lòng nhập sồ tiền hợp lệ!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

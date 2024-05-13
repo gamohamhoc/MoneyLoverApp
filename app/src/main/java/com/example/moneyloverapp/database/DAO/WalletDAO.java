@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.moneyloverapp.database.DatabaseHandler;
+import com.example.moneyloverapp.models.Transaction;
 import com.example.moneyloverapp.models.Wallet;
 
 import java.util.ArrayList;
@@ -85,5 +86,9 @@ public class WalletDAO {
     public List<Wallet> GetAll(){
         String sql = "SELECT * FROM Wallets";
         return GetData(sql);
+    }
+
+    public void Delete(Wallet wallet){
+        db.delete("Wallets", "Id = ?", new String[]{String.valueOf(wallet.getId())});
     }
 }

@@ -73,6 +73,10 @@ public class TransactionDAO {
         db.delete("Transactions", "Id = ?", new String[]{String.valueOf(transaction.getId())});
     }
 
+    public void DeletebyWalletId(int walletId){
+        db.delete("Transactions", "WalletId = ?", new String[]{String.valueOf(walletId)});
+    }
+
     public Transaction GetById(int Id){
         Cursor c = db.query("Transactions", null,"Id = ?", new String[] { String.valueOf(Id) },null, null, null);
         if(c != null && c.getCount() > 0){
