@@ -1,6 +1,9 @@
 package com.example.moneyloverapp.fragments;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
+import com.example.moneyloverapp.activities.ChooseWalletActivity;
 import com.example.moneyloverapp.database.DAO.TransactionDAO;
 import com.example.moneyloverapp.database.DAO.WalletDAO;
 import com.example.moneyloverapp.models.Transaction;
@@ -39,6 +43,7 @@ public class TransactionFragment extends Fragment {
     TransactionDAO transactionDAO;
     TextView totalBalanceOfWallet;
     Wallet wallet;
+    int walletId;
     WalletDAO walletDAO;
     public TransactionFragment() {
         // Required empty public constructor
@@ -61,7 +66,13 @@ public class TransactionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
-        wallet = walletDAO.GetById(Integer.parseInt (((TextView)view.findViewById(R.id.wallet_id)).getText().toString()));
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+        walletId = preferences.getInt("walletId", 0);
+        if(walletId == 0){
+            walletId = 1;
+        }
+        wallet = walletDAO.GetById(walletId);
         //
         transactionDAO = new TransactionDAO(getContext());
         //
@@ -72,6 +83,15 @@ public class TransactionFragment extends Fragment {
         ((TextView)view.findViewById(R.id.wallet_acc_name)).setText(wallet.getName());
         //
         GetTransactionsByDateRV();
+
+        //
+        view.findViewById(R.id.choose_wallet_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ChooseWalletActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
@@ -84,8 +104,13 @@ public class TransactionFragment extends Fragment {
                 return false;
             }
         });
+        List<Transaction> transactions;
+        if(walletId == 1){
+            transactions = transactionDAO.GetAll();
+        }else{
+            transactions = transactionDAO.GetTransactionsbyWalletId(wallet.getId());
+        }
 
-        List<Transaction> transactions = transactionDAO.GetTransactionsbyWalletId(wallet.getId());
         List<TransactionsByDate> transactionsByDates = new ArrayList<>();
 
         HashMap<Date, List<Transaction>> resultMap = new HashMap<>();

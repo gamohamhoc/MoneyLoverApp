@@ -39,12 +39,14 @@ public class RecentTransactionsAdapter extends RecyclerView.Adapter<RecentTransa
     public RecentTransactionsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
         final RecentTransactionsViewHolder mViewHolder = new RecentTransactionsViewHolder(mView);
-        mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(v, mViewHolder.getPosition());
-            }
-        });
+        if(listener != null){
+            mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(v, mViewHolder.getPosition());
+                }
+            });
+        }
         return mViewHolder;
 
 //        return new RecentTransactionsViewHolder(

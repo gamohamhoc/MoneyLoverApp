@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
+import com.example.moneyloverapp.activities.ChooseWalletActivity;
 import com.example.moneyloverapp.activities.MainActivity;
+import com.example.moneyloverapp.activities.SplashScreenActivity;
 import com.example.moneyloverapp.activities.TransactionActivity;
 import com.example.moneyloverapp.database.DAO.TransactionDAO;
 import com.example.moneyloverapp.database.DAO.WalletDAO;
@@ -79,6 +81,14 @@ public class DashboardFragment extends Fragment {
 
         GetWalletListRV();
         GetRecentTransactionsRV();
+
+        view.findViewById(R.id.see_all_wallet).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ChooseWalletActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         // Inflate the layout for this fragment

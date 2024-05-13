@@ -69,6 +69,19 @@ public class WalletDAO {
         return wallet;
     }
 
+    public Wallet GetByName(String name){
+        Cursor c = db.query("Wallets", null,"Name = ?", new String[] { String.valueOf(name) },null, null, null);
+        if(c != null)
+            c.moveToFirst();
+        Wallet wallet = new Wallet(
+                c.getInt(0),
+                c.getString(1),
+                c.getFloat(2),
+                c.getInt(3)
+        );
+        return wallet;
+    }
+
     public List<Wallet> GetAll(){
         String sql = "SELECT * FROM Wallets";
         return GetData(sql);

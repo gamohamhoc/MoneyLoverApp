@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.moneyloverapp.R;
 
-public class WalletsActitvity extends AppCompatActivity {
+public class WalletsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

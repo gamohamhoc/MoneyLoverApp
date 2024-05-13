@@ -45,6 +45,7 @@ public class TransactionActivity extends AppCompatActivity {
     private Button saveButton;
     private TextView actionBarTitle;
     private Wallet wallet;
+    private Wallet globalWallet;
     private Category category;
     private Transaction transaction;
     int transactionId = 0;
@@ -80,6 +81,7 @@ public class TransactionActivity extends AppCompatActivity {
         categorySpinner.setAdapter(categorySpinnerAdapter);
         //wallet spinner
         List<Wallet> wallets = walletDAO.GetAll();
+        globalWallet = wallets.get(0);
         wallets.remove(0);
         WalletSpinnerAdapter walletSpinnerAdapter = new WalletSpinnerAdapter(getApplicationContext(), wallets);
         walletSpinner.setAdapter(walletSpinnerAdapter);
@@ -97,6 +99,7 @@ public class TransactionActivity extends AppCompatActivity {
                 category = categoryDAO.GetById(transaction.getCategoryId());
                 wallet = walletDAO.GetById(transaction.getWalletId());
 
+                //set du lieu cho spinner category
                 List<Category> categories = categorySpinnerAdapter.getCategories();
                 for (Category c : categories) {
                     if(c.getId() == category.getId()){
@@ -104,10 +107,11 @@ public class TransactionActivity extends AppCompatActivity {
                     }
                 }
 
+                //set du lieu cho spinner wallet
                 List<Wallet> walletList = walletSpinnerAdapter.getWallets();
                 for (Wallet w : walletList) {
                     if(w.getId() == wallet.getId()){
-                        categorySpinner.setSelection(walletList.indexOf(w));
+                        walletSpinner.setSelection(walletList.indexOf(w));
                     }
                 }
 
@@ -152,11 +156,14 @@ public class TransactionActivity extends AppCompatActivity {
 
                                         if(category1.getType() == 1){
                                             wallet1.setBalance(wallet1.getBalance() - transaction1.getAmount());
+                                            globalWallet.setBalance(globalWallet.getBalance() - transaction1.getAmount());
                                         }else {
                                             wallet1.setBalance(wallet1.getBalance() + transaction1.getAmount());
+                                            globalWallet.setBalance(globalWallet.getBalance() + transaction1.getAmount());
                                         }
 
                                         walletDAO.Update(wallet1);
+                                        walletDAO.Update(globalWallet);
 
                                         Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
                                         startActivity(intent);
@@ -192,6 +199,7 @@ public class TransactionActivity extends AppCompatActivity {
                 if(amountTV.getText() == null || amountTV.getText().length()==0){
                     Toast.makeText(getApplicationContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                 }else{
+                    //TH add transaction
                     if(transaction == null){
                         transaction = new Transaction();
 
@@ -210,11 +218,14 @@ public class TransactionActivity extends AppCompatActivity {
                             if(!transaction.getDate().after(new Date())){
                                 if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
                                     wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                    globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
                                 }else{
-                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                    wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
+                                    globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
                                 }
                                 transactionDAO.Add(transaction);
                                 walletDAO.Update(wallet1);
+                                walletDAO.Update(globalWallet);
                                 Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }else {
@@ -223,14 +234,17 @@ public class TransactionActivity extends AppCompatActivity {
                         }else{
                             Toast.makeText(getApplicationContext(), "Số tiền vượt quá số dư ví!", Toast.LENGTH_SHORT).show();
                         }
+                        //TH edit transaction
                     }else{
                         Wallet wallet1 = walletDAO.GetById(
                                 Integer.parseInt(
                                         ((TextView)findViewById(R.id.sp_wallet_id)).getText().toString()));
                         if(categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
                             wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
+                            globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
                         }else{
                             wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                            globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
                         }
 
                         transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
@@ -244,11 +258,14 @@ public class TransactionActivity extends AppCompatActivity {
                             if(!transaction.getDate().after(new Date())){
                                 if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
                                     wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                    globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
                                 }else{
-                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                    wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
+                                    globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
                                 }
                                 transactionDAO.Update(transaction);
                                 walletDAO.Update(wallet1);
+                                walletDAO.Update(globalWallet);
                                 Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }else {
