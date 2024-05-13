@@ -1,15 +1,19 @@
 package com.example.moneyloverapp.recycleViews.TransactionsByDate;
 
-import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
+import com.example.moneyloverapp.activities.TransactionActivity;
+import com.example.moneyloverapp.interfaces.CustomItemClickListener;
 import com.example.moneyloverapp.models.TransactionsByDate;
 import com.example.moneyloverapp.recycleViews.RecentTransactions.RecentTransactionsAdapter;
 import com.example.moneyloverapp.ultilities.DateTimeUltilities;
@@ -25,7 +29,12 @@ public class TransactionsByDateAdapter extends RecyclerView.Adapter<Transactions
             .RecycledViewPool();
 
     private List<TransactionsByDate> list;
+    private FragmentActivity activity;
 
+    public TransactionsByDateAdapter(List<TransactionsByDate> list, FragmentActivity activity) {
+        this.list = list;
+        this.activity = activity;
+    }
 
     public TransactionsByDateAdapter(List<TransactionsByDate> list) {
         this.list = list;
@@ -65,7 +74,21 @@ public class TransactionsByDateAdapter extends RecyclerView.Adapter<Transactions
         layoutManager.setInitialPrefetchItemCount(transactionsByDate.getTransactions().size());
 
         RecentTransactionsAdapter childItemAdapter
-                = new RecentTransactionsAdapter(holder.Transaction.getContext() ,transactionsByDate.getTransactions());
+                = new RecentTransactionsAdapter(holder.Transaction.getContext() ,transactionsByDate.getTransactions(),
+                new CustomItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        // do what ever you want to do with it
+                        Intent intent = new Intent(activity, TransactionActivity.class);
+
+                        String val = "Chi tiết giao dịch";
+                        int transactionId = Integer.parseInt (((TextView)v.findViewById(R.id.id)).getText().toString());
+                        intent.putExtra("actionBarTitle", val);
+                        intent.putExtra("transactionId", transactionId);
+
+                        activity.startActivity(intent);
+                    }
+                });
         holder.Transaction.setLayoutManager(layoutManager);
         holder.Transaction.setAdapter(childItemAdapter);
         holder.Transaction.setRecycledViewPool(viewPool);

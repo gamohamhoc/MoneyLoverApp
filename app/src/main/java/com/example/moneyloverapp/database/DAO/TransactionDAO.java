@@ -67,7 +67,10 @@ public class TransactionDAO {
         values.put("Description", transaction.getDescription());
 
         db.update("Transactions", values,"Id = ?", new String[] { String.valueOf(transaction.getId())});
-        db.close();
+    }
+
+    public void Delete(Transaction transaction){
+        db.delete("Transactions", "Id = ?", new String[]{String.valueOf(transaction.getId())});
     }
 
     public Transaction GetById(int Id){

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +47,7 @@ public class TransactionActivity extends AppCompatActivity {
     private Wallet wallet;
     private Category category;
     private Transaction transaction;
+    int transactionId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class TransactionActivity extends AppCompatActivity {
             actionBarTitle.setText(intent.getStringExtra("actionBarTitle"));
 
             int id = intent.getIntExtra("transactionId", 0);
+            transactionId = id;
 
             transaction = transactionDAO.GetById(id);
             if(transaction != null){
@@ -102,9 +105,9 @@ public class TransactionActivity extends AppCompatActivity {
                 }
 
                 List<Wallet> walletList = walletSpinnerAdapter.getWallets();
-                for (Wallet c : walletList) {
-                    if(c.getId() == wallet.getId()){
-                        categorySpinner.setSelection(walletList.indexOf(c));
+                for (Wallet w : walletList) {
+                    if(w.getId() == wallet.getId()){
+                        categorySpinner.setSelection(walletList.indexOf(w));
                     }
                 }
 
@@ -121,9 +124,54 @@ public class TransactionActivity extends AppCompatActivity {
         ImageView backImg = findViewById(R.id.exit_button);
         backImg.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        //delete button
+        ImageView deleteButton = findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(transactionId != 0){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TransactionActivity.this);
+
+                    builder.setMessage("Confirm delete this transaction?")
+                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Transaction transaction1 = transactionDAO.GetById(transactionId);
+                                    if(transaction1 == null){
+                                        Toast.makeText(getApplicationContext(), "Transaction not found for delete! Please check!", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        transactionDAO.Delete(transaction1);
+                                        Wallet wallet1 = walletDAO.GetById(transaction1.getWalletId());
+                                        Category category1 = categoryDAO.GetById(transaction1.getCategoryId());
+
+                                        if(category1.getType() == 1){
+                                            wallet1.setBalance(wallet1.getBalance() - transaction1.getAmount());
+                                        }else {
+                                            wallet1.setBalance(wallet1.getBalance() + transaction1.getAmount());
+                                        }
+
+                                        walletDAO.Update(wallet1);
+
+                                        Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                    }
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+
+                    AlertDialog deleteConfirmDiaglog = builder.create();
+                    deleteConfirmDiaglog.show();
+                }
             }
         });
 
@@ -135,21 +183,81 @@ public class TransactionActivity extends AppCompatActivity {
                 TextView idTV = findViewById(R.id.transaction_id);
                 TextView descriptionTV = findViewById(R.id.description_input);
 
+                String transactionId_str = ((TextView)findViewById(R.id.transaction_id)).getText().toString();
+
+                if(transactionId_str.length() > 0){
+                    transaction = transactionDAO.GetById(Integer.parseInt(transactionId_str));
+                }
+
                 if(amountTV.getText() == null || amountTV.getText().length()==0){
                     Toast.makeText(getApplicationContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                 }else{
-                    TransactionDAO transactionDAO = new TransactionDAO(getApplicationContext());
-                    Transaction transaction = new Transaction();
-                    transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
-                    transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
-                    transaction.setDate(DateTimeUltilities.StringToDate("MMM/dd/yyyy", dateButton.getText().toString()));
-                    transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
-                    transaction.setDescription(descriptionTV.getText().toString());
+                    if(transaction == null){
+                        transaction = new Transaction();
 
-                    transactionDAO.Add(transaction);
+                        transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
+                        transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
+                        transaction.setDate(DateTimeUltilities.StringToDate("MMM dd yyyy", dateButton.getText().toString()));
+                        transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
+                        transaction.setDescription(descriptionTV.getText().toString());
 
-                    Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                    startActivity(intent);
+                        Wallet wallet1 = walletDAO.GetById(
+                                Integer.parseInt(
+                                        ((TextView)findViewById(R.id.sp_wallet_id)).getText().toString()));
+
+                        if(transaction.getAmount() <= wallet1.getBalance() ||
+                                categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
+                            if(!transaction.getDate().after(new Date())){
+                                if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
+                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                }else{
+                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                }
+                                transactionDAO.Add(transaction);
+                                walletDAO.Update(wallet1);
+                                Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }else {
+                                Toast.makeText(getApplicationContext(), "Không được nhập ngày trong tương lai!", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Số tiền vượt quá số dư ví!", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Wallet wallet1 = walletDAO.GetById(
+                                Integer.parseInt(
+                                        ((TextView)findViewById(R.id.sp_wallet_id)).getText().toString()));
+                        if(categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
+                            wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
+                        }else{
+                            wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                        }
+
+                        transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
+                        transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
+                        transaction.setDate(DateTimeUltilities.StringToDate("MMM dd yyyy", dateButton.getText().toString()));
+                        transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
+                        transaction.setDescription(descriptionTV.getText().toString());
+
+                        if(transaction.getAmount() <= wallet1.getBalance() ||
+                                categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
+                            if(!transaction.getDate().after(new Date())){
+                                if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
+                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                }else{
+                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                }
+                                transactionDAO.Update(transaction);
+                                walletDAO.Update(wallet1);
+                                Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }else {
+                                Toast.makeText(getApplicationContext(), "Không được nhập ngày trong tương lai!", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Số tiền vượt quá số dư ví!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             }
         });

@@ -50,7 +50,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="tháng 5 2024"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textColor="@color/white"/>
 
         </LinearLayout>

@@ -53,7 +53,6 @@ public class CategoryDAO {
         values.put("Type", category.getType());
 
         db.update("Categories", values,"Id = ?", new String[] { String.valueOf(category.getId())});
-        db.close();
     }
 
     public Category GetById(int Id){

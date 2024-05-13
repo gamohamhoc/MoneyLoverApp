@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,11 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
 import com.example.moneyloverapp.database.DAO.TransactionDAO;
+import com.example.moneyloverapp.database.DAO.WalletDAO;
 import com.example.moneyloverapp.models.Transaction;
 import com.example.moneyloverapp.models.TransactionsByDate;
+import com.example.moneyloverapp.models.Wallet;
 import com.example.moneyloverapp.recycleViews.TransactionsByDate.TransactionsByDateAdapter;
 import com.example.moneyloverapp.recycleViews.WalletList.WalletListAdapter;
 import com.example.moneyloverapp.ultilities.DateTimeUltilities;
+import com.example.moneyloverapp.ultilities.NumberUltilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,8 +35,11 @@ import java.util.List;
  */
 public class TransactionFragment extends Fragment {
 
-    RecyclerView TrnansactionsByDateRV;
+    RecyclerView TransactionsByDateRV;
     TransactionDAO transactionDAO;
+    TextView totalBalanceOfWallet;
+    Wallet wallet;
+    WalletDAO walletDAO;
     public TransactionFragment() {
         // Required empty public constructor
     }
@@ -46,6 +53,7 @@ public class TransactionFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        walletDAO = new WalletDAO(getContext());
         super.onCreate(savedInstanceState);
     }
 
@@ -53,11 +61,15 @@ public class TransactionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
-
+        wallet = walletDAO.GetById(Integer.parseInt (((TextView)view.findViewById(R.id.wallet_id)).getText().toString()));
         //
         transactionDAO = new TransactionDAO(getContext());
         //
-        TrnansactionsByDateRV = view.findViewById(R.id.transactions_by_date);
+        TransactionsByDateRV = view.findViewById(R.id.transactions_by_date);
+        totalBalanceOfWallet = view.findViewById(R.id.acc_balance);
+
+        totalBalanceOfWallet.setText(NumberUltilities.FormatBalance(wallet.getBalance()));
+        ((TextView)view.findViewById(R.id.wallet_acc_name)).setText(wallet.getName());
         //
         GetTransactionsByDateRV();
 
@@ -66,14 +78,14 @@ public class TransactionFragment extends Fragment {
     }
 
     void GetTransactionsByDateRV(){
-        TrnansactionsByDateRV.setLayoutManager(new LinearLayoutManager(getContext()){
+        TransactionsByDateRV.setLayoutManager(new LinearLayoutManager(getContext()){
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
         });
 
-        List<Transaction> transactions = transactionDAO.GetTransactionsbyWalletId(2);
+        List<Transaction> transactions = transactionDAO.GetTransactionsbyWalletId(wallet.getId());
         List<TransactionsByDate> transactionsByDates = new ArrayList<>();
 
         HashMap<Date, List<Transaction>> resultMap = new HashMap<>();
@@ -111,6 +123,6 @@ public class TransactionFragment extends Fragment {
             }
         });
 
-        TrnansactionsByDateRV.setAdapter(new TransactionsByDateAdapter(transactionsByDates));
+        TransactionsByDateRV.setAdapter(new TransactionsByDateAdapter(transactionsByDates, getActivity()));
     }
 }

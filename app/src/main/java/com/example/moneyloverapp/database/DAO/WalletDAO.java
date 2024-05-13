@@ -54,7 +54,6 @@ public class WalletDAO {
         values.put("IsIncluded", wallet.getIsIncluded());
 
         db.update("Wallets", values,"Id = ?", new String[] { String.valueOf(wallet.getId())});
-        db.close();
     }
 
     public Wallet GetById(int Id){
