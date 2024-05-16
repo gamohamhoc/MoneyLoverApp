@@ -57,6 +57,7 @@ public class ChooseWalletActivity extends AppCompatActivity {
 //                Intent intent = new Intent(ChooseWalletActivity.this, MainActivity.class);
 //                startActivity(intent);
                 finish();
+                aaa
             }
         });
     }
