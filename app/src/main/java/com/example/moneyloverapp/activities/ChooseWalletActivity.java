@@ -54,10 +54,7 @@ public class ChooseWalletActivity extends AppCompatActivity {
         findViewById(R.id.choose_wallet_exit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(ChooseWalletActivity.this, MainActivity.class);
-//                startActivity(intent);
-                finish();
-                aaa
+                
             }
         });
     }
