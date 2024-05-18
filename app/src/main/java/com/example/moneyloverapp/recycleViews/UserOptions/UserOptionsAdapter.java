@@ -11,10 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
-import com.example.moneyloverapp.activities.MainActivity;
 import com.example.moneyloverapp.activities.WalletsActivity;
-import com.example.moneyloverapp.fragments.UserFragment;
-import com.example.moneyloverapp.recycleViews.WalletList.WalletListViewHolder;
 
 import java.util.List;
 

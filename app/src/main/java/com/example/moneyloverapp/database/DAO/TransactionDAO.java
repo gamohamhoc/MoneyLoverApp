@@ -89,7 +89,7 @@ public class TransactionDAO {
                     DateTimeUltilities.StringToDate("dd/MM/yyyy",c.getString(4)),
                     c.getString(5)
             );
-            transaction.setCategory(categoryDAO.GetById(c.getInt(0)).getName());
+            transaction.setCategory(categoryDAO.GetById(c.getInt(1)).getName());
 
             return transaction;
         }

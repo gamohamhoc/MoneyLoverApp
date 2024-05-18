@@ -21,8 +21,6 @@ import com.example.moneyloverapp.models.Transaction;
 import com.example.moneyloverapp.models.TransactionsByDate;
 import com.example.moneyloverapp.models.Wallet;
 import com.example.moneyloverapp.recycleViews.TransactionsByDate.TransactionsByDateAdapter;
-import com.example.moneyloverapp.recycleViews.WalletList.WalletListAdapter;
-import com.example.moneyloverapp.ultilities.DateTimeUltilities;
 import com.example.moneyloverapp.ultilities.NumberUltilities;
 
 import java.util.ArrayList;
@@ -40,11 +38,13 @@ import java.util.List;
 public class TransactionFragment extends Fragment {
 
     RecyclerView TransactionsByDateRV;
+    TransactionsByDateAdapter transactionsByDateAdapter;
     TransactionDAO transactionDAO;
     TextView totalBalanceOfWallet;
     Wallet wallet;
     int walletId;
     WalletDAO walletDAO;
+    TextView walletName;
     public TransactionFragment() {
         // Required empty public constructor
     }
@@ -66,22 +66,14 @@ public class TransactionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
-        walletId = preferences.getInt("walletId", 0);
-        if(walletId == 0){
-            walletId = 1;
-        }
-        wallet = walletDAO.GetById(walletId);
         //
         transactionDAO = new TransactionDAO(getContext());
         //
         TransactionsByDateRV = view.findViewById(R.id.transactions_by_date);
         totalBalanceOfWallet = view.findViewById(R.id.acc_balance);
-
-        totalBalanceOfWallet.setText(NumberUltilities.FormatBalance(wallet.getBalance()));
-        ((TextView)view.findViewById(R.id.wallet_acc_name)).setText(wallet.getName());
+        walletName = view.findViewById(R.id.wallet_acc_name);
         //
+        getWallet();
         GetTransactionsByDateRV();
 
         //
@@ -97,6 +89,16 @@ public class TransactionFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume (){
+        super.onResume();
+
+        getWallet();
+
+        List<TransactionsByDate> transactionsByDates = getTransactionsByDate();
+        transactionsByDateAdapter.setList(transactionsByDates);
+    }
+
     void GetTransactionsByDateRV(){
         TransactionsByDateRV.setLayoutManager(new LinearLayoutManager(getContext()){
             @Override
@@ -104,6 +106,22 @@ public class TransactionFragment extends Fragment {
                 return false;
             }
         });
+
+        transactionsByDateAdapter = new TransactionsByDateAdapter(getTransactionsByDate(), getActivity());
+        TransactionsByDateRV.setAdapter(transactionsByDateAdapter);
+    }
+    void getWallet(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+        walletId = preferences.getInt("walletId", 0);
+        if(walletId == 0){
+            walletId = 1;
+        }
+        wallet = walletDAO.GetById(walletId);
+        totalBalanceOfWallet.setText(NumberUltilities.FormatBalanceWithCurrency(wallet.getBalance()));
+        walletName.setText(wallet.getName());
+    }
+
+    List<TransactionsByDate> getTransactionsByDate(){
         List<Transaction> transactions;
         if(walletId == 1){
             transactions = transactionDAO.GetAll();
@@ -130,6 +148,17 @@ public class TransactionFragment extends Fragment {
             TransactionsByDate transactionsByDate = new TransactionsByDate();
             List<Transaction> transactionList = resultMap.get(dateKey);
 
+            Collections.sort(transactionList, new Comparator<Transaction>() {
+                public int compare(Transaction o1, Transaction o2) {
+                    if(o2.getDate().compareTo(o1.getDate()) == 0){
+                        if(o1.getId() < o2.getId()){
+                            return 1;
+                        };
+                        return -1;
+                    }
+                    return o2.getDate().compareTo(o1.getDate());
+                }
+            });
 
             transactionsByDate.setTransactions(transactionList);
             transactionsByDate.setDate(dateKey);
@@ -148,6 +177,6 @@ public class TransactionFragment extends Fragment {
             }
         });
 
-        TransactionsByDateRV.setAdapter(new TransactionsByDateAdapter(transactionsByDates, getActivity()));
+        return transactionsByDates;
     }
 }

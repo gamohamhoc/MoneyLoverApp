@@ -129,8 +129,7 @@ public class TransactionActivity extends AppCompatActivity {
         backImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -152,21 +151,14 @@ public class TransactionActivity extends AppCompatActivity {
                                     }else {
                                         transactionDAO.Delete(transaction1);
                                         Wallet wallet1 = walletDAO.GetById(transaction1.getWalletId());
-                                        Category category1 = categoryDAO.GetById(transaction1.getCategoryId());
 
-                                        if(category1.getType() == 1){
-                                            wallet1.setBalance(wallet1.getBalance() - transaction1.getAmount());
-                                            globalWallet.setBalance(globalWallet.getBalance() - transaction1.getAmount());
-                                        }else {
-                                            wallet1.setBalance(wallet1.getBalance() + transaction1.getAmount());
-                                            globalWallet.setBalance(globalWallet.getBalance() + transaction1.getAmount());
-                                        }
+                                        wallet1.setBalance(wallet1.getBalance() - transaction1.getAmount());
+                                        globalWallet.setBalance(globalWallet.getBalance() - transaction1.getAmount());
 
                                         walletDAO.Update(wallet1);
                                         walletDAO.Update(globalWallet);
 
-                                        Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                                        startActivity(intent);
+                                        finish();
                                     }
                                 }
                             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -203,11 +195,21 @@ public class TransactionActivity extends AppCompatActivity {
                     if(transaction == null){
                         transaction = new Transaction();
                         try{
-                            transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
                             transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
                             transaction.setDate(DateTimeUltilities.StringToDate("MMM dd yyyy", dateButton.getText().toString()));
                             transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
                             transaction.setDescription(descriptionTV.getText().toString());
+
+                            Category category1 = categoryDAO.GetById(transaction.getCategoryId());
+                            float amount = Float.parseFloat(amountTV.getText().toString());
+
+                            if(amount <= 0) throw new Exception();
+
+                            if(category1.getType() == 1){
+                                transaction.setAmount(amount);
+                            }else{
+                                transaction.setAmount(-amount);
+                            }
 
                             Wallet wallet1 = walletDAO.GetById(
                                     Integer.parseInt(
@@ -216,18 +218,14 @@ public class TransactionActivity extends AppCompatActivity {
                             if(transaction.getAmount() <= wallet1.getBalance() ||
                                     categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
                                 if(!transaction.getDate().after(new Date())){
-                                    if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
-                                        wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
-                                        globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
-                                    }else{
-                                        wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
-                                        globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
-                                    }
+                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                    globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
+
                                     transactionDAO.Add(transaction);
                                     walletDAO.Update(wallet1);
                                     walletDAO.Update(globalWallet);
-                                    Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                                    startActivity(intent);
+
+                                    finish();
                                 }else {
                                     Toast.makeText(getApplicationContext(), "Không được nhập ngày trong tương lai!", Toast.LENGTH_SHORT).show();
                                 }
@@ -244,35 +242,35 @@ public class TransactionActivity extends AppCompatActivity {
                             Wallet wallet1 = walletDAO.GetById(
                                     Integer.parseInt(
                                             ((TextView)findViewById(R.id.sp_wallet_id)).getText().toString()));
-                            if(categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
-                                wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
-                                globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
-                            }else{
-                                wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
-                                globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
-                            }
+                            wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
+                            globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
 
-                            transaction.setAmount(Float.parseFloat(amountTV.getText().toString()));
                             transaction.setCategoryId(Integer.parseInt(((TextView)categorySpinner.findViewById(R.id.category_id)).getText().toString()));
                             transaction.setDate(DateTimeUltilities.StringToDate("MMM dd yyyy", dateButton.getText().toString()));
                             transaction.setWalletId(Integer.parseInt(((TextView)walletSpinner.findViewById(R.id.sp_wallet_id)).getText().toString()));
                             transaction.setDescription(descriptionTV.getText().toString());
 
+                            Category category1 = categoryDAO.GetById(transaction.getCategoryId());
+                            float amount = Float.parseFloat(amountTV.getText().toString());
+
+                            if(amount <= 0) throw new Exception();
+
+                            if(category1.getType() == 1){
+                                transaction.setAmount(amount);
+                            }else{
+                                transaction.setAmount(-amount);
+                            }
+
                             if(transaction.getAmount() <= wallet1.getBalance() ||
                                     categoryDAO.GetById(transaction.getCategoryId()).getType() == 1){
                                 if(!transaction.getDate().after(new Date())){
-                                    if(categoryDAO.GetById(transaction.getCategoryId()).getType()==1){
-                                        wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
-                                        globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
-                                    }else{
-                                        wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
-                                        globalWallet.setBalance(globalWallet.getBalance() - transaction.getAmount());
-                                    }
+                                    wallet1.setBalance(wallet1.getBalance() + transaction.getAmount());
+                                    globalWallet.setBalance(globalWallet.getBalance() + transaction.getAmount());
+
                                     transactionDAO.Update(transaction);
                                     walletDAO.Update(wallet1);
                                     walletDAO.Update(globalWallet);
-                                    Intent intent = new Intent(TransactionActivity.this, MainActivity.class);
-                                    startActivity(intent);
+                                    finish();
                                 }else {
                                     Toast.makeText(getApplicationContext(), "Không được nhập ngày trong tương lai!", Toast.LENGTH_SHORT).show();
                                 }

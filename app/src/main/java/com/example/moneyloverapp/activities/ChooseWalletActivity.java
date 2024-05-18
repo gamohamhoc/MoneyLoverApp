@@ -4,12 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.moneyloverapp.R;
 import com.example.moneyloverapp.database.DAO.WalletDAO;
@@ -19,9 +19,10 @@ import com.example.moneyloverapp.ultilities.NumberUltilities;
 
 import java.util.List;
 
-public class ChooseWalletActivity extends AppCompatActivity {
+public class ChooseWalletActivity extends AppCompatActivity implements WalletListAdapter.ChooseWalletListener {
 
     RecyclerView chooseWalletRV;
+    WalletListAdapter chooseWalletAdapter;
     WalletDAO walletDAO;
 
     @Override
@@ -48,14 +49,23 @@ public class ChooseWalletActivity extends AppCompatActivity {
         Wallet globalWallet = walletDAO.GetById(1);
         ((TextView)findViewById(R.id.wallet_global_name)).setText(globalWallet.getName());
         ((TextView)findViewById(R.id.wallet_global_amount)).setText(
-                NumberUltilities.FormatBalance(globalWallet.getBalance())
+                NumberUltilities.FormatBalanceWithCurrency(globalWallet.getBalance())
         );
         //
         findViewById(R.id.choose_wallet_exit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(ChooseWalletActivity.this, MainActivity.class);
-//                startActivity(intent);
+                finish();
+            }
+        });
+
+        findViewById(R.id.global_wallet).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("walletId", 1);
+                editor.apply();
                 finish();
             }
         });
@@ -64,9 +74,20 @@ public class ChooseWalletActivity extends AppCompatActivity {
     void GetWalletListRV(){
         List<Wallet> walletList = walletDAO.GetAll();
 
+        chooseWalletAdapter = new WalletListAdapter(walletList.subList(1,walletList.size()));
+        chooseWalletAdapter.setChooseWalletListener(this);
         chooseWalletRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        chooseWalletRV.setAdapter(new WalletListAdapter(getApplicationContext(),
-                walletList.subList(1,walletList.size()),
-                this));
+        chooseWalletRV.setAdapter(chooseWalletAdapter);
+    }
+
+    @Override
+    public void OnWalletClick(View view, int position) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        int walletId = chooseWalletAdapter.getWallet(position).getId();
+        editor.putInt("walletId", walletId);
+        editor.apply();
+
+        finish();
     }
 }

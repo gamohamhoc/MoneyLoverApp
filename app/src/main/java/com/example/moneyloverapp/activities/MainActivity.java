@@ -13,9 +13,13 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.moneyloverapp.R;
+import com.example.moneyloverapp.database.DAO.TransactionDAO;
 import com.example.moneyloverapp.databinding.ActivityMainBinding;
+import com.example.moneyloverapp.models.Transaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {

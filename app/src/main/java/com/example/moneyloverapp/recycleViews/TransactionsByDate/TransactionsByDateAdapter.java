@@ -1,6 +1,7 @@
 package com.example.moneyloverapp.recycleViews.TransactionsByDate;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneyloverapp.R;
 import com.example.moneyloverapp.activities.TransactionActivity;
-import com.example.moneyloverapp.interfaces.CustomItemClickListener;
 import com.example.moneyloverapp.models.TransactionsByDate;
 import com.example.moneyloverapp.recycleViews.RecentTransactions.RecentTransactionsAdapter;
 import com.example.moneyloverapp.ultilities.DateTimeUltilities;
@@ -34,6 +34,11 @@ public class TransactionsByDateAdapter extends RecyclerView.Adapter<Transactions
     public TransactionsByDateAdapter(List<TransactionsByDate> list, FragmentActivity activity) {
         this.list = list;
         this.activity = activity;
+    }
+
+    public void setList(List<TransactionsByDate> list){
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     public TransactionsByDateAdapter(List<TransactionsByDate> list) {
@@ -65,7 +70,13 @@ public class TransactionsByDateAdapter extends RecyclerView.Adapter<Transactions
 
         holder.TransactionByDate_Day.setText(DateTimeUltilities.IntToDay( transactionsByDate.getDate().getDay()));
         holder.TransactionByDate_DetailDate.setText("tháng " + (transactionsByDate.getDate().getMonth()+1) + " " + (transactionsByDate.getDate().getYear()+1900));
-        holder.TransactionByDate_TotalAmount.setText(NumberUltilities.FormatBalance(transactionsByDate.getTotalAmount()));
+        holder.TransactionByDate_TotalAmount.setText(NumberUltilities.FormatBalanceWithCurrency(transactionsByDate.getTotalAmount()));
+
+        if(transactionsByDate.getTotalAmount() < 0){
+            holder.TransactionByDate_TotalAmount.setTextColor(Color.RED);
+        }else{
+            holder.TransactionByDate_TotalAmount.setTextColor(Color.GREEN);
+        }
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(
@@ -73,22 +84,23 @@ public class TransactionsByDateAdapter extends RecyclerView.Adapter<Transactions
 
         layoutManager.setInitialPrefetchItemCount(transactionsByDate.getTransactions().size());
 
-        RecentTransactionsAdapter childItemAdapter
-                = new RecentTransactionsAdapter(holder.Transaction.getContext() ,transactionsByDate.getTransactions(),
-                new CustomItemClickListener() {
-                    @Override
-                    public void onItemClick(View v, int position) {
-                        // do what ever you want to do with it
-                        Intent intent = new Intent(activity, TransactionActivity.class);
+        RecentTransactionsAdapter childItemAdapter =
+                new RecentTransactionsAdapter(transactionsByDate.getTransactions(), "description");
 
-                        String val = "Chi tiết giao dịch";
-                        int transactionId = Integer.parseInt (((TextView)v.findViewById(R.id.id)).getText().toString());
-                        intent.putExtra("actionBarTitle", val);
-                        intent.putExtra("transactionId", transactionId);
+        childItemAdapter.setListener(new RecentTransactionsAdapter.TransactionListener() {
+            @Override
+            public void onTransactionClick(View view, int position) {
+                Intent intent = new Intent(activity, TransactionActivity.class);
+//
+                String val = "Chi tiết giao dịch";
+                int transactionId = Integer.parseInt (((TextView)view.findViewById(R.id.id)).getText().toString());
+                intent.putExtra("actionBarTitle", val);
+                intent.putExtra("transactionId", transactionId);
 
-                        activity.startActivity(intent);
-                    }
-                });
+                activity.startActivity(intent);
+            }
+        });
+
         holder.Transaction.setLayoutManager(layoutManager);
         holder.Transaction.setAdapter(childItemAdapter);
         holder.Transaction.setRecycledViewPool(viewPool);

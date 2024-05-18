@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,8 +48,7 @@ public class WalletDetailActivity extends AppCompatActivity {
         findViewById(R.id.wallet_detail_exit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(WalletDetailActivity.this, WalletsActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -77,12 +78,19 @@ public class WalletDetailActivity extends AppCompatActivity {
                                     Wallet deleteWallet = walletDAO.GetById(walletId);
                                     globalWallet.setBalance(globalWallet.getBalance() - deleteWallet.getBalance());
 
+                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                    int currentChosenWalletId = preferences.getInt("walletId", 0);
+                                    if(walletId == currentChosenWalletId){
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putInt("walletId", 1);
+                                        editor.apply();
+                                    }
+
                                     walletDAO.Delete(deleteWallet);
                                     walletDAO.Update(globalWallet);
                                     transactionDAO.DeletebyWalletId(walletId);
 
-                                    Intent intent = new Intent(WalletDetailActivity.this, WalletsActivity.class);
-                                    startActivity(intent);
+                                    finish();
                                 }
                             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 @Override
@@ -106,7 +114,7 @@ public class WalletDetailActivity extends AppCompatActivity {
                     }else{
                         try{
                             float amount = Float.parseFloat(WalletAmountInput.getText().toString().trim());
-                            if(amount <= 0){
+                            if(amount < 0){
                                 throw new Exception();
                             }
                             Wallet wallet = new Wallet();
@@ -118,8 +126,7 @@ public class WalletDetailActivity extends AppCompatActivity {
 
                             walletDAO.Add(wallet);
                             walletDAO.Update(globalWallet);
-                            Intent intent = new Intent(WalletDetailActivity.this, WalletsActivity.class);
-                            startActivity(intent);
+                            finish();
 
                         }catch (Exception e){
                             Toast.makeText(getApplicationContext(), "Vui lòng điền số tiền hợp lệ!", Toast.LENGTH_SHORT).show();
@@ -128,7 +135,7 @@ public class WalletDetailActivity extends AppCompatActivity {
                 }else{
                     try{
                         float amount = Float.parseFloat(WalletAmountInput.getText().toString().trim());
-                        if(amount <= 0){
+                        if(amount < 0){
                             throw new Exception();
                         }
                         Wallet wallet = walletDAO.GetById(walletId);
@@ -143,8 +150,7 @@ public class WalletDetailActivity extends AppCompatActivity {
 
                         walletDAO.Update(wallet);
                         walletDAO.Update(globalWallet);
-                        Intent intent = new Intent(WalletDetailActivity.this, WalletsActivity.class);
-                        startActivity(intent);
+                        finish();
                     }catch (Exception e){
                         Toast.makeText(getApplicationContext(), "Vui lòng điền số tiền hợp lệ!", Toast.LENGTH_SHORT).show();
                     }

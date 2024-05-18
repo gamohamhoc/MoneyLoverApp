@@ -9,8 +9,12 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import com.example.moneyloverapp.R;
+import com.example.moneyloverapp.database.DAO.TransactionDAO;
 import com.example.moneyloverapp.database.DAO.WalletDAO;
+import com.example.moneyloverapp.models.Transaction;
 import com.example.moneyloverapp.models.Wallet;
+
+import java.util.List;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -20,7 +24,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         getSupportActionBar().hide();
-
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("walletId", 1);
