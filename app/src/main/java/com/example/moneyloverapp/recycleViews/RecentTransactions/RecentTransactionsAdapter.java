@@ -27,7 +27,6 @@ public class RecentTransactionsAdapter extends RecyclerView.Adapter<RecentTransa
     List<Transaction> recentTransactions;
     TransactionListener listener;
     String type;
-    CategoryDAO categoryDAO;
 
     public RecentTransactionsAdapter( List<Transaction> recentTransactions, TransactionListener listener) {
         this.recentTransactions = recentTransactions;

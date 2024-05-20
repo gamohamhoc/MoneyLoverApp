@@ -61,8 +61,10 @@ public class MyWalletsListAdapter  extends RecyclerView.Adapter<MyWalletsListVie
 
     @Override
     public void onBindViewHolder(@NonNull MyWalletsListViewHolder holder, int position) {
-        holder.walletName.setText(walletList.get(position).getName());
-        holder.walletBalance.setText(NumberUltilities.FormatBalanceWithCurrency(walletList.get(position).getBalance()));
+        Wallet wallet = walletList.get(position);
+
+        holder.walletName.setText(wallet.getName());
+        holder.walletBalance.setText(NumberUltilities.FormatBalanceWithCurrency(wallet.getBalance()));
         holder.imageView.setImageResource(R.drawable.wallet_icon);
     }
 

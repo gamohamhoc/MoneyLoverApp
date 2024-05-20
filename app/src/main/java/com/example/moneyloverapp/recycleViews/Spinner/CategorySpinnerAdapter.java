@@ -28,6 +28,11 @@ public class CategorySpinnerAdapter extends ArrayAdapter<Category> {
         this.categories = lists;
     }
 
+    public void setCategories(List<Category> categories){
+        this.categories = categories;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

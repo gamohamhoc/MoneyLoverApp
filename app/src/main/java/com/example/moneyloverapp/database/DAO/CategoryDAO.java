@@ -71,4 +71,9 @@ public class CategoryDAO {
         String sql = "SELECT * FROM Categories";
         return GetData(sql);
     }
+
+    public List<Category> GetByType(int type){
+        String sql = "SELECT * FROM Categories WHERE Type = ?";
+        return GetData(sql, new String[]{type+""});
+    }
 }

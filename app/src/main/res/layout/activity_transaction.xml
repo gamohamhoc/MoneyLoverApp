@@ -171,25 +171,57 @@
             app:layout_constraintLeft_toRightOf="@+id/category_picker_label"
             app:layout_constraintRight_toRightOf="parent"/>
 
-<!--        chon wallet-->
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="50dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/categorySpinner">
+
+            <RadioButton
+                android:id="@+id/thuRadio"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:padding="4dp"
+                android:text="Thu"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/chiRadio"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:padding="4dp"
+                android:text="Chi"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        </RadioGroup>
+
+        <!--        chon wallet-->
+
         <TextView
             android:id="@+id/wallet_picker_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/category_picker_label"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="60dp"
             android:padding="7dp"
-            android:layout_marginTop="10dp"
             android:text="Chọn ví"
-            android:textSize="20sp"
             android:textColor="@color/white"
-            android:textStyle="bold"/>
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/category_picker_label" />
 
         <Spinner
             android:id="@+id/walletSpinner"
             android:layout_width="220dp"
             android:layout_height="50dp"
-            app:layout_constraintTop_toBottomOf="@+id/categorySpinner"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
             app:layout_constraintLeft_toRightOf="@+id/wallet_picker_label"
             app:layout_constraintRight_toRightOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

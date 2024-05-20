@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.example.moneyloverapp.models.Wallet;
 import com.example.moneyloverapp.recycleViews.Spinner.CategorySpinnerAdapter;
 import com.example.moneyloverapp.recycleViews.Spinner.WalletSpinnerAdapter;
 import com.example.moneyloverapp.ultilities.DateTimeUltilities;
+import com.example.moneyloverapp.ultilities.NumberUltilities;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +38,8 @@ public class TransactionActivity extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private Spinner categorySpinner;
+    private CategorySpinnerAdapter categorySpinnerAdapterType0;
+    private CategorySpinnerAdapter categorySpinnerAdapterType1;
     private Spinner walletSpinner;
     EditText amountInput;
     EditText descriptionInput;
@@ -77,8 +82,20 @@ public class TransactionActivity extends AppCompatActivity {
         dateButton.setText(getTodaysDate());
 
         //category spinner
-        CategorySpinnerAdapter categorySpinnerAdapter = new CategorySpinnerAdapter(getApplicationContext(), categoryDAO.GetAll());
-        categorySpinner.setAdapter(categorySpinnerAdapter);
+        categorySpinnerAdapterType1 = new CategorySpinnerAdapter(getApplicationContext(), categoryDAO.GetByType(1));
+        categorySpinnerAdapterType0 = new CategorySpinnerAdapter(getApplicationContext(), categoryDAO.GetByType(0));
+        categorySpinner.setAdapter(categorySpinnerAdapterType1);
+        //radio group
+        ((RadioGroup)findViewById(R.id.radioGroup)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                if(checkedId == R.id.thuRadio){
+                    categorySpinner.setAdapter(categorySpinnerAdapterType1);
+                } else if (checkedId == R.id.chiRadio) {
+                    categorySpinner.setAdapter(categorySpinnerAdapterType0);
+                }
+            }
+        });
         //wallet spinner
         List<Wallet> wallets = walletDAO.GetAll();
         globalWallet = wallets.get(0);
@@ -99,8 +116,17 @@ public class TransactionActivity extends AppCompatActivity {
                 category = categoryDAO.GetById(transaction.getCategoryId());
                 wallet = walletDAO.GetById(transaction.getWalletId());
 
+                //set cho radio group
+                if(transaction.getAmount() < 0){
+                    ((RadioButton) findViewById(R.id.chiRadio)).setChecked(true);
+                    categorySpinner.setAdapter(categorySpinnerAdapterType0);
+                }else{
+                    ((RadioButton) findViewById(R.id.thuRadio)).setChecked(true);
+                    categorySpinner.setAdapter(categorySpinnerAdapterType1);
+                }
+
                 //set du lieu cho spinner category
-                List<Category> categories = categorySpinnerAdapter.getCategories();
+                List<Category> categories = ((CategorySpinnerAdapter)categorySpinner.getAdapter()).getCategories();
                 for (Category c : categories) {
                     if(c.getId() == category.getId()){
                         categorySpinner.setSelection(categories.indexOf(c));
@@ -115,7 +141,7 @@ public class TransactionActivity extends AppCompatActivity {
                     }
                 }
 
-                amountInput.setText(transaction.getAmount()+"", TextView.BufferType.EDITABLE);
+                amountInput.setText(NumberUltilities.FormatBalance( transaction.getAmount()), TextView.BufferType.EDITABLE);
                 descriptionInput.setText(transaction.getDescription(), TextView.BufferType.EDITABLE);
 
                 Date transactionDate = transaction.getDate();
