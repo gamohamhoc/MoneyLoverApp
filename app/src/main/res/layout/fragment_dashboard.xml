@@ -81,7 +81,7 @@
     <LinearLayout
         android:id="@+id/expense_report_header"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:paddingTop="5dp"
@@ -117,18 +117,24 @@
         android:padding="12dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
+        android:background="@color/black_frame"
         app:layout_constraintTop_toBottomOf="@+id/expense_report_header">
 
 <!--        chon tgian tuan/thang-->
         <LinearLayout
+            android:id="@+id/week_month_choose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:background="@color/black_frame"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tuan"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="Tuần"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -137,10 +143,13 @@
                 android:layout_weight="1"/>
 
             <TextView
+                android:id="@+id/thang"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="Tháng"
                 android:textStyle="bold"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:textColor="@color/white"
                 android:textSize="12dp"
                 android:gravity="center"
@@ -148,14 +157,11 @@
 
         </LinearLayout>
 
-
-<!--        text view tong chi tuan/thang nay-->
-
-<!--        text view phan tram so sanh tuan/thang nay voi tuan/thang truoc-->
-
-<!--        bieu do-->
-
-<!--        RV list 3 category dc chi tieu nhieu nhat-->
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/idBarChart"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/week_month_choose"
+            android:layout_height="200dp" />
 
     </RelativeLayout>
 

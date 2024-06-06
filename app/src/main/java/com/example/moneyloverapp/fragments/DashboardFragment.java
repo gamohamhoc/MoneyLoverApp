@@ -1,6 +1,7 @@
 package com.example.moneyloverapp.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,13 @@ import com.example.moneyloverapp.models.Transaction;
 import com.example.moneyloverapp.recycleViews.RecentTransactions.RecentTransactionsAdapter;
 import com.example.moneyloverapp.recycleViews.WalletList.WalletListAdapter;
 import com.example.moneyloverapp.ultilities.NumberUltilities;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -40,6 +47,18 @@ public class DashboardFragment extends Fragment implements RecentTransactionsAda
     RecyclerView recentTransactionsRV;
     RecentTransactionsAdapter recentTransactionsAdapter;
     TextView totalBalance;
+
+    // variable for our bar chart
+    BarChart barChart;
+
+    // variable for our bar data.
+    BarData barData;
+
+    // variable for our bar data set.
+    BarDataSet barDataSet;
+
+    // array list for storing entries.
+    ArrayList barEntriesArrayList;
     public DashboardFragment() {
         // Required empty public constructor
     }
@@ -81,8 +100,49 @@ public class DashboardFragment extends Fragment implements RecentTransactionsAda
                 startActivity(intent);
             }
         });
+
+        getBarChart(view);
+
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void getBarChart(View view) {
+        // initializing variable for bar chart.
+        barChart = view.findViewById(R.id.idBarChart);
+
+        // calling method to get bar entries.
+        getBarEntries();
+
+        // creating a new bar data set.
+        barDataSet = new BarDataSet(barEntriesArrayList, "Geeks for Geeks");
+
+        // creating a new bar data and
+        // passing our bar data set.
+        barData = new BarData(barDataSet);
+
+        // below line is to set data
+        // to our bar chart.
+        barChart.setData(barData);
+
+        // adding color to our bar data set.
+        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+
+        // setting text color.
+        barDataSet.setValueTextColor(Color.GRAY);
+        // setting text size
+        barDataSet.setValueTextSize(16f);
+        barChart.getDescription().setEnabled(false);
+    }
+
+    private void getBarEntries() {
+        // creating a new array list
+        barEntriesArrayList = new ArrayList<>();
+
+        // adding new entry to our array list with bar
+        // entry and passing x and y axis value to it.
+        barEntriesArrayList.add(new BarEntry(1f, 4));
+        barEntriesArrayList.add(new BarEntry(2f, 6));
     }
 
     @Override

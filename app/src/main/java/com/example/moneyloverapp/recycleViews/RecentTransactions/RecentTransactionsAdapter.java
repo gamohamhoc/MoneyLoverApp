@@ -66,7 +66,63 @@ public class RecentTransactionsAdapter extends RecyclerView.Adapter<RecentTransa
         holder.category.setText(transaction.getCategory());
         holder.date.setText(DateTimeUltilities.FormatDate("dd/MM/yyyy" ,transaction.getDate()));
         holder.amount.setText(NumberUltilities.FormatBalanceWithCurrency(transaction.getAmount()));
-        holder.imageView.setImageResource(R.drawable.wallet_icon);
+
+        switch (transaction.getCategory()){
+            case "Bán đồ":
+                holder.imageView.setImageResource(R.drawable.wallet_icon);
+                break;
+            case "Được tặng":
+                holder.imageView.setImageResource(R.drawable.icon_hand_holding_money);
+                break;
+            case "Lương":
+                holder.imageView.setImageResource(R.drawable.icon_salary);
+                break;
+            case "Thưởng":
+                holder.imageView.setImageResource(R.drawable.icon_money_reward);
+                break;
+            case "Tiền lãi":
+                holder.imageView.setImageResource(R.drawable.icon_interest);
+                break;
+            case "Thu nhập khác":
+                holder.imageView.setImageResource(R.drawable.wallet_icon);
+                break;
+            case "Ăn uống":
+                holder.imageView.setImageResource(R.drawable.icon_eating);
+                break;
+            case "Bạn bè":
+                holder.imageView.setImageResource(R.drawable.icon_friends);
+                break;
+            case "Người yêu":
+                holder.imageView.setImageResource(R.drawable.icon_heart);
+                break;
+            case "Di chuyển":
+                holder.imageView.setImageResource(R.drawable.icon_cars);
+                break;
+            case "Gia đình":
+                holder.imageView.setImageResource(R.drawable.icon_family);
+                break;
+            case "Du lịch":
+                holder.imageView.setImageResource(R.drawable.icon_travel);
+                break;
+            case "Giải trí":
+                holder.imageView.setImageResource(R.drawable.icon_game);
+                break;
+            case "Mua sắm":
+                holder.imageView.setImageResource(R.drawable.icon_shopping);
+                break;
+            case "Cưới hỏi":
+                holder.imageView.setImageResource(R.drawable.icon_wedding);
+                break;
+            case "Tang lễ":
+                holder.imageView.setImageResource(R.drawable.icon_funeral);
+                break;
+            case "Từ thiện":
+                holder.imageView.setImageResource(R.drawable.icon_charity);
+                break;
+            case "Các chi phí khác":
+                holder.imageView.setImageResource(R.drawable.wallet_icon);
+                break;
+        }
 
         if(type == "description"){
             holder.date.setText(transaction.getDescription());
